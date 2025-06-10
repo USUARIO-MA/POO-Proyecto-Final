@@ -1,0 +1,446 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package sv.edu.udb.view;
+
+/**
+ *
+ * @author Mercadeo 1
+ */
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
+import javax.swing.JOptionPane;
+import org.apache.log4j.Logger;
+import sv.edu.udb.controller.EjemplaresDAO;
+import sv.edu.udb.model.Material;
+import sv.edu.udb.model.Usuario;
+
+
+
+public class ConsultarEjemplarFrame extends javax.swing.JFrame {
+
+    private static final Logger log= Logger.getLogger(ConsultarEjemplarFrame.class);
+    
+    
+    
+    // metodo cargar ejemplares
+ private void cargarTodosLosEjemplares() {
+   DefaultTableModel modelo = new DefaultTableModel(
+    new String[]{"ID", "Título", "Autor", "Ubicación", "Disponible", "Tipo"}, 0
+) {
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false; // Ninguna celda será editable
+    }
+};
+
+
+    try {
+        EjemplaresDAO dao = new EjemplaresDAO();
+        List<Material> materiales = dao.obtenerMateriales();
+
+        for (Material m : materiales) {
+            modelo.addRow(new Object[]{
+                m.getId(),
+                m.getTitulo(),
+                m.getAutor(),
+                m.getUbicacion(),
+                m.getCantidadDisponible(),
+                m.getTipo()
+            });
+        }
+
+        tblEjemplares.setModel(modelo);
+
+    } catch (Exception e) {
+        log.error("Error al cargar los ejemplares "+e.getMessage(),e);
+        JOptionPane.showMessageDialog(this, "Error al cargar los ejemplares: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+
+}
+
+    //metodo buscar por id 
+  private void buscarPorID(int idMaterial) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{
+        "ID", "Título", "Autor", "Ubicación", "Disponible", "Tipo"
+    });
+
+    try {
+        EjemplaresDAO dao = new EjemplaresDAO();
+        Material m = dao.obtenerMaterialPorID(idMaterial); // Este método debes tenerlo en tu DAO
+
+        if (m != null) {
+            modelo.addRow(new Object[]{
+                m.getId(),
+                m.getTitulo(),
+                m.getAutor(),
+                m.getUbicacion(),
+                m.getCantidadDisponible(),
+                m.getTipo()
+            });
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró ningún material con el ID ingresado.");
+        }
+
+        tblEjemplares.setModel(modelo);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar el material: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+  
+  
+  
+  
+  
+  private void buscarPorTitulo(String titulo) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{
+        "ID", "Título", "Autor", "Ubicación", "Disponible", "Tipo"
+    });
+
+    try {
+        EjemplaresDAO dao = new EjemplaresDAO();
+        List<Material> materiales = dao.buscarMaterialesPorTitulo(titulo);
+
+        for (Material m : materiales) {
+            modelo.addRow(new Object[]{
+                m.getId(),
+                m.getTitulo(),
+                m.getAutor(),
+                m.getUbicacion(),
+                m.getCantidadDisponible(),
+                m.getTipo()
+            });
+        }
+
+        tblEjemplares.setModel(modelo);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar por título: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+  
+  
+  
+  
+  
+  //  Buscar por tipo 
+  private void buscarPorTipo(String tipo) {
+    DefaultTableModel modelo = new DefaultTableModel();
+    modelo.setColumnIdentifiers(new String[]{
+        "ID Material", "Título", "Autor", "Ubicación", "Disponible", "Tipo"
+    });
+
+    try {
+        EjemplaresDAO dao = new EjemplaresDAO();
+        List<Material> materiales = dao.buscarMaterialesPorTipo(tipo);
+
+        for (Material m : materiales) {
+            modelo.addRow(new Object[]{
+                m.getId(),
+                m.getTitulo(),
+                m.getAutor(),
+                m.getUbicacion(),
+                m.getCantidadDisponible(),
+                m.getTipo()
+            });
+        }
+
+        tblEjemplares.setModel(modelo);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al buscar por tipo: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+  
+
+
+
+    
+    /**
+     * Creates new form ConsultarEjemplarFrame
+     */
+    public ConsultarEjemplarFrame() {
+        initComponents();
+        setLocationRelativeTo(null);
+        cargarTodosLosEjemplares();
+        
+        
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        pnlBusqueda = new javax.swing.JPanel();
+        lblBuscar = new javax.swing.JLabel();
+        txtBuscar = new javax.swing.JTextField();
+        cmbFiltro = new javax.swing.JComboBox<>();
+        lblFiltros = new javax.swing.JLabel();
+        btnBuscar = new javax.swing.JButton();
+        btnCargarTodos = new javax.swing.JButton();
+        lblTituloPanel = new javax.swing.JLabel();
+        pnlEjemplares = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEjemplares = new javax.swing.JTable();
+        btnMenu = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblBuscar.setText("Buscar por:");
+
+        cmbFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "ID material", "Titulo", "Tipo", " " }));
+        cmbFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbFiltroActionPerformed(evt);
+            }
+        });
+
+        lblFiltros.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblFiltros.setText("Filtros:");
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnCargarTodos.setText("Cargar Todos");
+        btnCargarTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCargarTodosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlBusquedaLayout = new javax.swing.GroupLayout(pnlBusqueda);
+        pnlBusqueda.setLayout(pnlBusquedaLayout);
+        pnlBusquedaLayout.setHorizontalGroup(
+            pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBusquedaLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(lblBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addComponent(lblFiltros)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBusquedaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnCargarTodos)
+                .addGap(223, 223, 223))
+        );
+        pnlBusquedaLayout.setVerticalGroup(
+            pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBusquedaLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblBuscar)
+                    .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFiltros))
+                .addGap(18, 18, 18)
+                .addGroup(pnlBusquedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCargarTodos)
+                    .addComponent(btnBuscar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        lblTituloPanel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblTituloPanel.setText("CONSULTAR EJEMPLARES");
+
+        tblEjemplares.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Titulo", "Autor", "Ubicacion", "Disponible", "Tipo"
+            }
+        ));
+        tblEjemplares.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEjemplaresMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEjemplares);
+
+        javax.swing.GroupLayout pnlEjemplaresLayout = new javax.swing.GroupLayout(pnlEjemplares);
+        pnlEjemplares.setLayout(pnlEjemplaresLayout);
+        pnlEjemplaresLayout.setHorizontalGroup(
+            pnlEjemplaresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEjemplaresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 702, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlEjemplaresLayout.setVerticalGroup(
+            pnlEjemplaresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEjemplaresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnMenu.setText("Volver al Menu");
+        btnMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMenuActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pnlBusqueda, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(pnlEjemplares, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(248, 248, 248)
+                        .addComponent(lblTituloPanel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnMenu)
+                        .addGap(22, 22, 22)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTituloPanel)
+                    .addComponent(btnMenu))
+                .addGap(18, 18, 18)
+                .addComponent(pnlBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pnlEjemplares, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbFiltroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbFiltroActionPerformed
+
+    
+    
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+       String criterio = cmbFiltro.getSelectedItem().toString();
+    String valor = txtBuscar.getText().trim();
+
+    if (criterio.equals("ID material")) {
+        if (!valor.matches("\\d+")) {
+            JOptionPane.showMessageDialog(this, "Ingrese un ID válido (solo números).");
+            return;
+        }
+        buscarPorID(Integer.parseInt(valor));
+    } else if (criterio.equals("Titulo")) {
+        if (valor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un título para buscar.");
+            return;
+        }
+        buscarPorTitulo(valor);
+        } else if (criterio.equals("Tipo")) {
+        if (valor.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un tipo para buscar (ej: Libro, Revista, etc).");
+            return;
+        }
+        buscarPorTipo(valor);
+    }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    
+    
+    
+    private void btnCargarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarTodosActionPerformed
+        cargarTodosLosEjemplares();
+    }//GEN-LAST:event_btnCargarTodosActionPerformed
+
+    private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+            new AdminFrame().setVisible(true);
+            dispose();// TODO add your handling code here:
+    }//GEN-LAST:event_btnMenuActionPerformed
+
+    private void tblEjemplaresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEjemplaresMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblEjemplaresMouseClicked
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ConsultarEjemplarFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ConsultarEjemplarFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ConsultarEjemplarFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ConsultarEjemplarFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ConsultarEjemplarFrame().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnCargarTodos;
+    private javax.swing.JButton btnMenu;
+    private javax.swing.JComboBox<String> cmbFiltro;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblBuscar;
+    private javax.swing.JLabel lblFiltros;
+    private javax.swing.JLabel lblTituloPanel;
+    private javax.swing.JPanel pnlBusqueda;
+    private javax.swing.JPanel pnlEjemplares;
+    private javax.swing.JTable tblEjemplares;
+    private javax.swing.JTextField txtBuscar;
+    // End of variables declaration//GEN-END:variables
+}
